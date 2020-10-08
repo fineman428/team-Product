@@ -1,0 +1,9 @@
+rentalService\AbstractEvent.class
+rentalService\ProductSaved.class
+rentalService\config\kafka\KafkaProcessor.class
+rentalService\PolicyHandler.class
+rentalService\ProductController.class
+rentalService\ProductRepository.class
+rentalService\Product.class
+rentalService\AbstractEvent$1.class
+rentalService\ProductApplication.class
