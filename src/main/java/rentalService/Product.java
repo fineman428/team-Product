@@ -1,9 +1,14 @@
 package rentalService;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+
+import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.beans.BeanUtils;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name="Product_table")
 public class Product {
@@ -12,6 +17,9 @@ public class Product {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
+
+    @ColumnDefault("10") //default 10
+    private int qty ;
 
     @PostPersist
     public void onPostPersist(){
@@ -22,7 +30,7 @@ public class Product {
 
     }
 
-
+    /*
     public Long getId() {
         return id;
     }
@@ -36,4 +44,12 @@ public class Product {
         this.name = name;
     }
 
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
+        this.qty = qty;
+    }
+    */
 }
