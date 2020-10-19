@@ -16,12 +16,12 @@ spec:
     spec:
       containers:
         - name: Product
-          image: username/Product:latest
+          image: 496278789073.dkr.ecr.ap-northeast-1.amazonaws.com/skccuser02-product
           ports:
             - containerPort: 8080
           readinessProbe:
             httpGet:
-              path: '/actuator/health'
+              path: '/products'
               port: 8080
             initialDelaySeconds: 10
             timeoutSeconds: 2
@@ -29,7 +29,7 @@ spec:
             failureThreshold: 10
           livenessProbe:
             httpGet:
-              path: '/actuator/health'
+              path: '/products'
               port: 8080
             initialDelaySeconds: 120
             timeoutSeconds: 2
