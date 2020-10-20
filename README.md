@@ -51,6 +51,20 @@
 ![istio_3](https://user-images.githubusercontent.com/67616972/96565852-db4ab980-12ff-11eb-97a7-ccec04968e2f.JPG)
 
 
+## LivenessProbs 설정 적용 시뮬레이션
+
+* configmap deployment.yml 파일 livenessprobs 설정 (product 서비스)
+  http rest 호출을 통한 서비스 liveness 상태 확인 적용
+  임의로 비정상적인 url 을 설정하여 비정상 적인 상태 감지 적용 
+  (정상 URL : /products , 비정상 URL : /productsTest)
+![LivelessConfig](https://user-images.githubusercontent.com/67616972/96566198-3aa8c980-1300-11eb-80ee-4e6bc593dc16.JPG)
+
+* LivenessProbs 설정에 의해 pod container 가 가용성이 미확보 되었다고 판단 
+  pod 재생성 및 container 서비스 구동 확인 
+![LivelessConfig_1](https://user-images.githubusercontent.com/67616972/96566575-b4d94e00-1300-11eb-863a-114a42fea702.JPG)
+![LivelessConfig_2](https://user-images.githubusercontent.com/67616972/96566577-b571e480-1300-11eb-89fe-0474a55ae495.JPG)
+
+
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
 
 * 서킷 브레이킹 프레임워크의 선택: Spring FeignClient + Hystrix 옵션을 사용하여 구현함
