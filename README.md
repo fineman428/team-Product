@@ -6,7 +6,7 @@
 ## CI/CD 설정
 
 * Repository 구성
-각 서비스 구현체들은 git hub repository 를 통합 구성되었음.
+* 각 서비스 구현체들은 git hub repository 를 통합 구성되었음.
 
 ![image](https://user-images.githubusercontent.com/23513745/96562401-b0f6fd00-12fb-11eb-8b2d-6c5428318dbc.png)
 
@@ -54,13 +54,13 @@
 ## LivenessProbs 설정 적용 시뮬레이션
 
 * configmap deployment.yml 파일 livenessprobs 설정 (product 서비스)
-  http rest 호출을 통한 서비스 liveness 상태 확인 적용
-  임의로 비정상적인 url 을 설정하여 비정상 적인 상태 감지 적용 
-  (정상 URL : /products , 비정상 URL : /productsTest)
+* http rest 호출을 통한 서비스 liveness 상태 확인 적용
+* 임의로 비정상적인 url 을 설정하여 비정상 적인 상태 감지 적용 
+* (정상 URL : /products , 비정상 URL : /productsTest)
 ![LivelessConfig](https://user-images.githubusercontent.com/67616972/96566198-3aa8c980-1300-11eb-80ee-4e6bc593dc16.JPG)
 
 * LivenessProbs 설정에 의해 pod container 가 가용성이 미확보 되었다고 판단 
-  pod 재생성 및 container 서비스 구동 확인 
+* pod 재생성 및 container 서비스 구동 확인 
 ![LivelessConfig_1](https://user-images.githubusercontent.com/67616972/96566575-b4d94e00-1300-11eb-863a-114a42fea702.JPG)
 ![LivelessConfig_2](https://user-images.githubusercontent.com/67616972/96566577-b571e480-1300-11eb-89fe-0474a55ae495.JPG)
 
