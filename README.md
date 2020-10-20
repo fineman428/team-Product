@@ -288,8 +288,9 @@ public interface RentalRepository extends PagingAndSortingRepository<Rental, Lon
 
 ## 폴리글랏 퍼시스턴스
 
-팀프로젝트 진행 시 간편한 DB구성을 위해 RDBMS 기반의 H2 DB를 적용하였다. H2는 Docker에서 설정이 가능하기 때문에 application.yml 파일에는 설정하지 않았으며 dependencies에만 추가하여 진행하였다. 
-@Table를 사용하여 따로 테이블명을 지정하였으며 Entity Pattern과 Repository Pattern을 적용하였다.
+* 팀프로젝트 진행 시 간편한 DB구성을 위해 RDBMS 기반의 H2 DB를 적용하였다.
+* H2는 Docker에서 설정이 가능하기 때문에 application.yml 파일에는 설정하지 않았으며 dependencies에만 추가하여 진행하였다. 
+* @Table를 사용하여 따로 테이블명을 지정하였으며 Entity Pattern과 Repository Pattern을 적용하였다.
 
 ```
 #Product.java
@@ -329,7 +330,7 @@ pom.xml
 
 ## 폴리글랏 프로그래밍
 
-물품 대여 시스템의 시나리오인 대여, 배송 등의 시스템 구현 방식은 JPA를 기반으로 구현하였으며 주요 이벤트 처리방식은 Kafka, FeignClient를 적용하였다.
+* 물품 대여 시스템의 시나리오인 대여, 배송 등의 시스템 구현 방식은 JPA를 기반으로 구현하였으며 주요 이벤트 처리방식은 Kafka, FeignClient를 적용하였다.
 ```
 #Kafka 적용
 
@@ -390,7 +391,8 @@ public interface DeliveryService {
 
 ## 동기식 호출 과 Fallback 처리
 
-분석단계에서의 조건 중 하나로 주문취소->배송취소 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 
+* 분석단계에서의 조건 중 하나로 주문취소->배송취소 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다.
+* 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 
 
 - FeignClient 방식을 통해서 Request-Response 처리.
 
@@ -458,9 +460,9 @@ public class RentalApplication {
 
 ## 비동기식 호출 / 시간적 디커플링 / 장애격리 / 최종 (Eventual) 일관성 테스트
 
-Rental이 이루어진 후에(Rentaled)  Delivery 시스템으로 이를 알려주는 행위는 동기식이 아니라 비 동기식으로 처리.   
-Delivery 시스템의 처리를 위하여 Rental이 블로킹 되지 않도록 처리.   
-이를 위하여 Rental 이력에 기록을 남긴 후에 곧바로 Rental이 처리 되었다는 도메인 이벤트를 카프카로 송출한다(Publish).   
+* Rental이 이루어진 후에(Rentaled)  Delivery 시스템으로 이를 알려주는 행위는 동기식이 아니라 비 동기식으로 처리.   
+* Delivery 시스템의 처리를 위하여 Rental이 블로킹 되지 않도록 처리.   
+* 이를 위하여 Rental 이력에 기록을 남긴 후에 곧바로 Rental이 처리 되었다는 도메인 이벤트를 카프카로 송출한다(Publish).   
 ```
 package rentalService;
 ...
