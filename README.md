@@ -83,7 +83,6 @@
 
     - 상품팀이 상품정보를 등록한다. (ok)
     - 상품 등록 정보가 렌탈, 배송에 상품으로 저장된다. (ok)
-    - 저장된 렌탈 상품 정보가 Delivery 상품 aggregate에 저장된다. (ok)
 
 ![t2](https://user-images.githubusercontent.com/70308042/96542673-8f871880-12dd-11eb-9648-6e5b73d5df4f.JPG)
 
