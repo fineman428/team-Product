@@ -31,7 +31,24 @@
 
 
 ## Configmap , 설정의 외부 주입을 통한 유연성을 제공
-![image](https://user-images.githubusercontent.com/23513745/96563579-0ed81480-12fd-11eb-8104-0f8369ffc1f3.png)
+
+* Configmap - rental 서비스 deployment.yaml 구성예
+![deployment](https://user-images.githubusercontent.com/67616972/96565408-4942b100-12ff-11eb-870c-3b6d3cdd9262.JPG)
+
+* Configmap 을 기반으로 한 k8s deployment 구성
+![configMap 서비스](https://user-images.githubusercontent.com/67616972/96565562-7e4f0380-12ff-11eb-83f6-20628d5c36de.JPG)
+
+
+## istio (사이드카 방식) 삽입 및 모니터링 구성 
+
+* team-rent 네임스페이스 사이드카 삽입을 통한 k8s deployment 구성
+![istio_1](https://user-images.githubusercontent.com/67616972/96565743-b9513700-12ff-11eb-962e-708a6d50b4f7.JPG)
+
+* kiali 모니터링 - MSA 간 서비스 호출 구조도 트렉킹
+![istio_2](https://user-images.githubusercontent.com/67616972/96565826-d5ed6f00-12ff-11eb-9171-a9212a2dd586.JPG)
+
+* Jeager 모니터링 - Rest API 호출 트렉킹 
+![istio_3](https://user-images.githubusercontent.com/67616972/96565852-db4ab980-12ff-11eb-97a7-ccec04968e2f.JPG)
 
 
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
