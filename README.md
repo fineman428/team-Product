@@ -68,35 +68,53 @@
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
 
 * 서킷 브레이킹 프레임워크의 선택: Spring FeignClient + Hystrix 옵션을 사용하여 구현함
-
 * 시나리오는 상품(product)-->렌탈(rental) 연결을 기준으로 시뮬레이션이 주성되었고, 상품등록 요청이 과도할 경우 CB 를 통하여 장애격리.
 
 * application.yml 파일 수정, Hystrix 를 설정:  요청처리 쓰레드에서 처리시간이 610 밀리가 넘어서기 시작하여 어느정도 유지되면 CB 회로가 닫히도록 (요청을 빠르게 실패처리, 차단) 설정
-
 ![image](https://user-images.githubusercontent.com/23513745/96563655-26170200-12fd-11eb-8f46-2e71f19f56db.png)
 
 * Product 서비스 product entity prepoersist 에 쓰레드 및 sleep 을 통한 부하처리 적용 
 ![image](https://user-images.githubusercontent.com/23513745/96563674-2e6f3d00-12fd-11eb-8b2c-072112a9cd71.png)
 
+* 부하발생 테스터 siege(워크로드) 툴을 통한 서킷브레이커 동작확인 
+* 지속적으로 회로 열림과 담힘 확인
+![서킷브레이크_1](https://user-images.githubusercontent.com/67616972/96568997-8d37b500-1303-11eb-8076-3df89c4e3496.JPG)
+![서킷브레이크_2](https://user-images.githubusercontent.com/67616972/96569005-8f017880-1303-11eb-9202-0627d0d6b9ed.JPG)
 
 
-## 오토스케일 아웃
+## 오토스케일 아웃(HPA)
 
+* prouct 서비스 configmap 에 resource 설정 추가 
+![image](https://user-images.githubusercontent.com/67616972/96568422-e6531900-1302-11eb-92e1-3524709fbe5d.png)
+
+* kubelet, product deploy 오토스케일 아웃 설정
+![HPA_1](https://user-images.githubusercontent.com/67616972/96568614-1995a800-1303-11eb-889b-b011256bbd3f.JPG)
+
+* siege(워크로드) 서비스 부하 발생에 따른 pod 증가 확인 
+![HPA_3](https://user-images.githubusercontent.com/67616972/96568738-3cc05780-1303-11eb-8224-10e57bb68903.JPG)
+
+* 부하발생이 진행됨에 따라, 지속적으로 pod 갯수 증가 모니터링
+![HPA_8](https://user-images.githubusercontent.com/67616972/96568855-5a8dbc80-1303-11eb-8bae-4e25453a1d5d.JPG)
 
 
 ## 무정지 재배포
 
-![무중단배포_1](https://user-images.githubusercontent.com/67616972/96567009-3cbf5800-1301-11eb-800d-06eec7f25d8e.JPG)
-
 * ReadnessProbs 설정후 무중단 배포 확인
-* 워크로드 서비스 로그 결과 가용성 100% 확인 
+![image](https://user-images.githubusercontent.com/67616972/96568422-e6531900-1302-11eb-92e1-3524709fbe5d.png)
+
+* siege(워크로드) 서비스 로그 결과 가용성 100% 확인 
 ![무중단배포_4(100%)](https://user-images.githubusercontent.com/67616972/96567171-755f3180-1301-11eb-9902-877c5697b70d.JPG)
 
-* ReadnessProbs 설정 제고후 이미지 변경 시 가용성 미확보 확인
-![무중단배포_5(readness 미적용)](https://user-images.githubusercontent.com/67616972/96567319-99227780-1301-11eb-8a31-b34a52497ae1.JPG)
+* product 서비스 deployment 이미지 변경으로 인한 신규 image 레플리카셋 기반 pod 생성 과정 모니터링
+![무중단배포_1](https://user-images.githubusercontent.com/67616972/96567009-3cbf5800-1301-11eb-800d-06eec7f25d8e.JPG)
 
 * product 서비스 deployment image 변경 히스토리 확인 
 ![무중단배포_3](https://user-images.githubusercontent.com/67616972/96567087-582a6300-1301-11eb-89ff-6328416ef328.JPG)
+
+* ReadnessProbs 설정 제거후 이미지 변경, siege(워크로드) 모니터링 결과 가용성 미확보 확인 (100% -> 27.33%)
+![무중단배포_5(readness 미적용)](https://user-images.githubusercontent.com/67616972/96567319-99227780-1301-11eb-8a31-b34a52497ae1.JPG)
+
+
 
 
 
