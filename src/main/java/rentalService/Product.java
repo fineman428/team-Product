@@ -24,11 +24,12 @@ public class Product {
     @PrePersist
     public void onPrePersist(){
         /* 서킷브레이크 테스트  */
+        /*
         try {
             Thread.currentThread().sleep((long) (800 + Math.random() * 220));
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @PostPersist
