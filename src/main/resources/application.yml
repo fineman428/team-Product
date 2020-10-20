@@ -62,3 +62,22 @@ spring:
         event-out:
           destination: rentalService
           contentType: application/json
+          
+          
+feign:
+  hystrix:
+    enabled: true
+
+# To set thread isolation to SEMAPHORE
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          strategy: SEMAPHORE
+
+hystrix:
+  command:
+    # 전역설정
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 610
