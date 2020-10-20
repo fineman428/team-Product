@@ -80,10 +80,23 @@
 
 
 
-### 오토스케일 아웃
+## 오토스케일 아웃
 
 
 
 ## 무정지 재배포
+
+![무중단배포_1](https://user-images.githubusercontent.com/67616972/96567009-3cbf5800-1301-11eb-800d-06eec7f25d8e.JPG)
+
+* ReadnessProbs 설정후 무중단 배포 확인
+* 워크로드 서비스 로그 결과 가용성 100% 확인 
+![무중단배포_4(100%)](https://user-images.githubusercontent.com/67616972/96567171-755f3180-1301-11eb-9902-877c5697b70d.JPG)
+
+* ReadnessProbs 설정 제고후 이미지 변경 시 가용성 미확보 확인
+![무중단배포_5(readness 미적용)](https://user-images.githubusercontent.com/67616972/96567319-99227780-1301-11eb-8a31-b34a52497ae1.JPG)
+
+* product 서비스 deployment image 변경 히스토리 확인 
+![무중단배포_3](https://user-images.githubusercontent.com/67616972/96567087-582a6300-1301-11eb-89ff-6328416ef328.JPG)
+
 
 
