@@ -11,7 +11,7 @@
     - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
     - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
     - [비동기식 호출 과 Eventual Consistency](#비동기식-호출-과-Eventual-Consistency)
-    - [Application 서비스 시나리오별 테스트](#Application 서비스 시나리오별 테스트
+    - [Application 서비스 시나리오별 테스트](#Application 서비스 시나리오별 테스트)
   - [운영](#운영)
     - [CI/CD 설정](#cicd설정)
     - [클라우드 환경 서비스 테스트 (gateway 외부 URL) ](#클라우드 환경 서비스 테스트 (gateway 외부 URL))
