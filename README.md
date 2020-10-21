@@ -11,13 +11,13 @@
     - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
     - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
     - [비동기식 호출 과 Eventual Consistency](#비동기식-호출-과-Eventual-Consistency)
-    - Application 서비스 시나리오별 테스트
+    - [Application 서비스 시나리오별 테스트](https://github.com/fineman428/team-Product#ddd-%EC%9D%98-%EC%A0%81%EC%9A%A9)
   - [운영](#운영)
     - [CI/CD 설정](#cicd설정)
-    - 클라우드 환경 서비스 테스트 (gateway 외부 URL) 
-    - Configmap , 설정의 외부 주입을 통한 유연성을 제공
-    - istio (사이드카 방식) 삽입 및 모니터링 구성 
-    - LivenessProbs 설정 적용 시뮬레이션 
+    - [클라우드 환경 서비스 테스트 (gateway 외부 URL)](https://github.com/fineman428/team-Product#ddd-%EC%9D%98-%EC%A0%81%EC%9A%A9) 
+    - [Configmap , 설정의 외부 주입을 통한 유연성을 제공](https://github.com/fineman428/team-Product#ddd-%EC%9D%98-%EC%A0%81%EC%9A%A9)
+    - [istio (사이드카 방식) 삽입 및 모니터링 구성](https://github.com/fineman428/team-Product#ddd-%EC%9D%98-%EC%A0%81%EC%9A%A9) 
+    - [LivenessProbs 설정 적용 시뮬레이션](https://github.com/fineman428/team-Product#ddd-%EC%9D%98-%EC%A0%81%EC%9A%A9) 
     - [동기식 호출 / 서킷 브레이킹 / 장애격리](#동기식-호출-서킷-브레이킹-장애격리)
     - [오토스케일 아웃](#오토스케일-아웃)
     - [무정지 재배포](#무정지-재배포)
@@ -494,6 +494,7 @@ http GET http://localhost:8082/rentals/1 # 제대로 kafka로 부터 data 수신
 ```
 (status가 “CANCELED_UnregisteredProduct”으로 처리된 사유는 Rental 적합성 체크시 Delivery 의 Product Reposity에 등록된 Product를 확인하는데, Delivery 서비스를 재기동하면서 Delivery의  Product Repository(h2database)가 초기화되면서 발생)
 ![8-2 Delivery서비스 기동후 Delivery및 Rental 처리확인](https://user-images.githubusercontent.com/70302880/96542118-61ed9f80-12dc-11eb-9cee-f4442ebcb617.PNG)
+
 
 
 ## Application 서비스 시나리오별 테스트
