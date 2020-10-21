@@ -649,7 +649,7 @@ http GET http://localhost:8082/rentals/1 # 제대로 kafka로 부터 data 수신
 ![configMap 서비스](https://user-images.githubusercontent.com/67616972/96565562-7e4f0380-12ff-11eb-83f6-20628d5c36de.JPG)
 
 
-## istio (사이드카 방식) 삽입 및 모니터링 구성 
+## istio (사이드카 패턴) 삽입 및 모니터링 구성 
 
 * team-rent 네임스페이스 사이드카 삽입을 통한 k8s deployment 구성
 ![istio_1](https://user-images.githubusercontent.com/67616972/96565743-b9513700-12ff-11eb-962e-708a6d50b4f7.JPG)
@@ -687,7 +687,7 @@ http GET http://localhost:8082/rentals/1 # 제대로 kafka로 부터 data 수신
 ![image](https://user-images.githubusercontent.com/23513745/96563674-2e6f3d00-12fd-11eb-8b2c-072112a9cd71.png)
 
 * 부하발생 테스터 siege(워크로드) 툴을 통한 서킷브레이커 동작확인 
-* 지속적으로 회로 열림과 담힘 확인
+* 속적으로 회로 열림과 담힘 확인 (istio 제어)
 ![서킷브레이크_1](https://user-images.githubusercontent.com/67616972/96568997-8d37b500-1303-11eb-8076-3df89c4e3496.JPG)
 ![서킷브레이크_2](https://user-images.githubusercontent.com/67616972/96569005-8f017880-1303-11eb-9202-0627d0d6b9ed.JPG)
 
