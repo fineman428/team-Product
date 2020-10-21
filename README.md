@@ -11,13 +11,13 @@
     - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
     - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
     - [비동기식 호출 과 Eventual Consistency](#비동기식-호출-과-Eventual-Consistency)
-    - [Application 서비스 시나리오별 테스트](#Application 서비스 시나리오별 테스트)
+    - Application 서비스 시나리오별 테스트
   - [운영](#운영)
     - [CI/CD 설정](#cicd설정)
-    - [클라우드 환경 서비스 테스트 (gateway 외부 URL) ](#클라우드 환경 서비스 테스트 (gateway 외부 URL))
-    - [Configmap , 설정의 외부 주입을 통한 유연성을 제공](#Configmap , 설정의 외부 주입을 통한 유연성을 제공)
-    - [istio (사이드카 방식) 삽입 및 모니터링 구성 ](#istio (사이드카 방식) 삽입 및 모니터링 구성 )
-    - [LivenessProbs 설정 적용 시뮬레이션 ](#LivenessProbs 설정 적용 시뮬레이션)
+    - 클라우드 환경 서비스 테스트 (gateway 외부 URL) 
+    - Configmap , 설정의 외부 주입을 통한 유연성을 제공
+    - istio (사이드카 방식) 삽입 및 모니터링 구성 
+    - LivenessProbs 설정 적용 시뮬레이션 
     - [동기식 호출 / 서킷 브레이킹 / 장애격리](#동기식-호출-서킷-브레이킹-장애격리)
     - [오토스케일 아웃](#오토스케일-아웃)
     - [무정지 재배포](#무정지-재배포)
