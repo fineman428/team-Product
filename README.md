@@ -564,6 +564,12 @@ http GET http://localhost:8082/rentals/1 # 제대로 kafka로 부터 data 수신
 
 * Repository 구성
 * 각 서비스 구현체들은 git hub repository 를 통합 구성되었음.
+* 구현제 Github Repository 주소 
+  - https://github.com/fineman428/team-Product
+  - https://github.com/fineman428/team-Rental
+  - https://github.com/fineman428/team-Delivery
+  - https://github.com/fineman428/team-Information
+  - https://github.com/fineman428/team-gateway
 
 ![image](https://user-images.githubusercontent.com/23513745/96562401-b0f6fd00-12fb-11eb-8b2d-6c5428318dbc.png)
 
