@@ -475,9 +475,12 @@ public class PolicyHandler{
            // 재고 확인
            Optional<Product> productOptional = ProductRepository.findByProductId(rentaled.getProductId());
            Product product = null;
+	   
            try {
                product = productOptional.get();
+	       
            } catch (Exception e) {
+	   
                // 상품정보 확인 불가
                System.out.println("rentaled 수신 : 상품정보 확인불가");
                delivery.setStatus("CANCELED_UnregisteredProduct");
@@ -490,12 +493,15 @@ public class PolicyHandler{
                System.out.println("재고 수량 비교 : qty="+product.getQty()+" / rentaled.getQty()="+rentaled.getQty());
                System.out.println("rentaled 수신 : 재고 부족 -> 보상 트랜젝션 (saga pattern))");
                delivery.setStatus("CANCELED_OutOfStock");
+	       
            } else {
                // 정상 - 재고 차감
                System.out.println("rentaled 수신 : 정상 - 재고 차감");
                product.setQty(  product.getQty()  -  rentaled.getQty() );
                ProductRepository.save(product);
+	       
            }
+	   
            // 배송정보 저장
            DeliveryRepository.save(delivery);
           
