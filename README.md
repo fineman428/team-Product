@@ -11,12 +11,16 @@
     - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
     - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
     - [비동기식 호출 과 Eventual Consistency](#비동기식-호출-과-Eventual-Consistency)
+    - [Application 서비스 시나리오별 테스트](#Application 서비스 시나리오별 테스트
   - [운영](#운영)
     - [CI/CD 설정](#cicd설정)
+    - [클라우드 환경 서비스 테스트 (gateway 외부 URL) ](#클라우드 환경 서비스 테스트 (gateway 외부 URL))
+    - [Configmap , 설정의 외부 주입을 통한 유연성을 제공](#Configmap , 설정의 외부 주입을 통한 유연성을 제공)
+    - [istio (사이드카 방식) 삽입 및 모니터링 구성 ](#istio (사이드카 방식) 삽입 및 모니터링 구성 )
+    - [LivenessProbs 설정 적용 시뮬레이션 ](#LivenessProbs 설정 적용 시뮬레이션)
     - [동기식 호출 / 서킷 브레이킹 / 장애격리](#동기식-호출-서킷-브레이킹-장애격리)
     - [오토스케일 아웃](#오토스케일-아웃)
     - [무정지 재배포](#무정지-재배포)
-  - [신규 개발 조직의 추가](#신규-개발-조직의-추가)
 
 # 서비스 시나리오
 
@@ -219,72 +223,6 @@ public interface RentalRepository extends PagingAndSortingRepository<Rental, Lon
 
 }
 ```
-## 적용 후 REST API 의 테스트   
-
-### Step 1-1 상품정보 등록   
-* 컴퓨터 등록 : http POST http://localhost:8081/products name=computer qty=9   
-![1-1_상품등록_컴퓨커](https://user-images.githubusercontent.com/70302880/96540543-ff46d480-12d8-11eb-9bcc-33128a10f6f6.PNG)
-   
-* 모니터등록 : http POST http://localhost:8081/products name=monitor qty=9   
-![1-1_상품등록_모니터](https://user-images.githubusercontent.com/70302880/96540538-fe15a780-12d8-11eb-967f-f25d11259abe.PNG)  
-   
-### Step 1-2 상품등록 후 결과 조회   
-* product : http GET http://localhost:8081/products/1   
-![1-2_결과조회_product](https://user-images.githubusercontent.com/70302880/96540548-00780180-12d9-11eb-8a79-35bac4fca8c4.PNG)   
-   
-* rental : http GET http://localhost:8082/products/1   
-![1-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540551-00780180-12d9-11eb-8924-583e2471c338.PNG)   
-   
-* delivery : http GET http://localhost:8083/products/1   
-![1-2_결과조회_delivery](https://user-images.githubusercontent.com/70302880/96540545-ffdf6b00-12d8-11eb-91d8-ddff7abffe51.PNG)  
-   
-### Step 2-1 렌탈 요청   
-* 재고 수량 이상 렌탈 요청 : http POST http://localhost:8082/rentals productId=1 qty=12 status=ORDERED productName=computer   
-![2-1_렌탈요청_재고수량이상](https://user-images.githubusercontent.com/70302880/96541735-96ad2700-12db-11eb-8256-8b7679516a85.PNG)   
-   
-* 미등록 상품 렌탈요청 : http POST http://localhost:8082/rentals productId=22 qty=12 status=ORDERED productName=computer   
-![2-1_렌탈요청_미등록상품](https://user-images.githubusercontent.com/70302880/96540552-01109800-12d9-11eb-817f-8b8b3717389c.PNG)   
-
-* 정상 렌탈 요청 : http POST http://localhost:8082/rentals productId=1 qty=3 status=ORDERED productName=computer
-![2-1_렌탈요청_정상](https://user-images.githubusercontent.com/70302880/96540557-0241c500-12d9-11eb-8902-13b64d3f64e4.PNG)
-
-
-### Step 2-2 렌탈 요청 후 결과 조회
-* rental 렌탈 주문 정보(재고 수량 이상) : http GET http://localhost:8082/rentals/1
-![2-2_결과조회_렌탈주문정보(재고수량이상)](https://user-images.githubusercontent.com/70302880/96542803-da089500-12dd-11eb-9aec-d3123e2de01f.PNG)
-
-* rental 렌탈 주문 정보(미등록 상품) : http GET http://localhost:8082/rentals/2
- ![2-2_결과조회_렌탈주문정보(미등록상품)](https://user-images.githubusercontent.com/70302880/96540559-02da5b80-12d9-11eb-8251-73f33fa307cc.PNG)
- 
-* rental 렌탈 주문 정보(정상) : http GET http://localhost:8082/rentals/3
- ![2-2_결과조회_렌탈주문정보(정상)](https://user-images.githubusercontent.com/70302880/96540564-040b8880-12d9-11eb-8ebd-0a646113b4b1.PNG)
- 
-* delivery 배송정보 : http GET http://localhost:8083/deliveries/3
- ![2-2_결과조회_배송정보](https://user-images.githubusercontent.com/70302880/96540566-04a41f00-12d9-11eb-877e-9f1478e15b3f.PNG)
- 
-* delivery 재고차감 확인 : http GET http://localhost:8083/products/1  
-  - 최초 제품 등록시 재고 9개, 3개 배송 되어 최종 수량 6개 변경
- ![2-2_결과조회_배송_재고차감확인](https://user-images.githubusercontent.com/70302880/96540565-040b8880-12d9-11eb-8a37-17ccc7c4e5c8.PNG)
- 
-* information 내 주문 View : http GET http://localhost:8084/myOrders/3
- ![2-2_결과조회_내주문VIEW](https://user-images.githubusercontent.com/70302880/96540558-02da5b80-12d9-11eb-8850-b2ec04648aba.PNG)
- 
- ### 3-1 렌탈 취소 요청
-* 렌탈취소 :  http DELETE http://localhost:8082/rentals/3
-![3-1_렌탈취소요청](https://user-images.githubusercontent.com/70302880/96540570-04a41f00-12d9-11eb-957f-cb58933be879.PNG)
-
- ### 3-2 렌탈 취소 후 결과조회
-* rental :  http GET http://localhost:8082/rentals/3
-![3-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540574-05d54c00-12d9-11eb-96a6-7cda28638b83.PNG)
-
-* delivery :  http GET http://localhost:8083/deliveries/3
-![3-2_결과조회_delivery](https://user-images.githubusercontent.com/70302880/96540572-053cb580-12d9-11eb-962b-9cf71791389e.PNG)
-
-* information :  http GET http://localhost:8084/myOrders/3
-![3-2_결과조회_information](https://user-images.githubusercontent.com/70302880/96540573-05d54c00-12d9-11eb-9b2a-ce15b90a01e3.PNG)
-
-* rental :  http GET http://localhost:8082/rentals/3
-![3-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540574-05d54c00-12d9-11eb-96a6-7cda28638b83.PNG)
 
 ## 폴리글랏 퍼시스턴스
 
@@ -557,6 +495,73 @@ http GET http://localhost:8082/rentals/1 # 제대로 kafka로 부터 data 수신
 (status가 “CANCELED_UnregisteredProduct”으로 처리된 사유는 Rental 적합성 체크시 Delivery 의 Product Reposity에 등록된 Product를 확인하는데, Delivery 서비스를 재기동하면서 Delivery의  Product Repository(h2database)가 초기화되면서 발생)
 ![8-2 Delivery서비스 기동후 Delivery및 Rental 처리확인](https://user-images.githubusercontent.com/70302880/96542118-61ed9f80-12dc-11eb-9cee-f4442ebcb617.PNG)
 
+
+## Application 서비스 시나리오별 테스트
+
+### Step 1-1 상품정보 등록   
+* 컴퓨터 등록 : http POST http://localhost:8081/products name=computer qty=9   
+![1-1_상품등록_컴퓨커](https://user-images.githubusercontent.com/70302880/96540543-ff46d480-12d8-11eb-9bcc-33128a10f6f6.PNG)
+   
+* 모니터등록 : http POST http://localhost:8081/products name=monitor qty=9   
+![1-1_상품등록_모니터](https://user-images.githubusercontent.com/70302880/96540538-fe15a780-12d8-11eb-967f-f25d11259abe.PNG)  
+   
+### Step 1-2 상품등록 후 결과 조회   
+* product : http GET http://localhost:8081/products/1   
+![1-2_결과조회_product](https://user-images.githubusercontent.com/70302880/96540548-00780180-12d9-11eb-8a79-35bac4fca8c4.PNG)   
+   
+* rental : http GET http://localhost:8082/products/1   
+![1-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540551-00780180-12d9-11eb-8924-583e2471c338.PNG)   
+   
+* delivery : http GET http://localhost:8083/products/1   
+![1-2_결과조회_delivery](https://user-images.githubusercontent.com/70302880/96540545-ffdf6b00-12d8-11eb-91d8-ddff7abffe51.PNG)  
+   
+### Step 2-1 렌탈 요청   
+* 재고 수량 이상 렌탈 요청 : http POST http://localhost:8082/rentals productId=1 qty=12 status=ORDERED productName=computer   
+![2-1_렌탈요청_재고수량이상](https://user-images.githubusercontent.com/70302880/96541735-96ad2700-12db-11eb-8256-8b7679516a85.PNG)   
+   
+* 미등록 상품 렌탈요청 : http POST http://localhost:8082/rentals productId=22 qty=12 status=ORDERED productName=computer   
+![2-1_렌탈요청_미등록상품](https://user-images.githubusercontent.com/70302880/96540552-01109800-12d9-11eb-817f-8b8b3717389c.PNG)   
+
+* 정상 렌탈 요청 : http POST http://localhost:8082/rentals productId=1 qty=3 status=ORDERED productName=computer
+![2-1_렌탈요청_정상](https://user-images.githubusercontent.com/70302880/96540557-0241c500-12d9-11eb-8902-13b64d3f64e4.PNG)
+
+
+### Step 2-2 렌탈 요청 후 결과 조회
+* rental 렌탈 주문 정보(재고 수량 이상) : http GET http://localhost:8082/rentals/1
+![2-2_결과조회_렌탈주문정보(재고수량이상)](https://user-images.githubusercontent.com/70302880/96542803-da089500-12dd-11eb-9aec-d3123e2de01f.PNG)
+
+* rental 렌탈 주문 정보(미등록 상품) : http GET http://localhost:8082/rentals/2
+ ![2-2_결과조회_렌탈주문정보(미등록상품)](https://user-images.githubusercontent.com/70302880/96540559-02da5b80-12d9-11eb-8251-73f33fa307cc.PNG)
+ 
+* rental 렌탈 주문 정보(정상) : http GET http://localhost:8082/rentals/3
+ ![2-2_결과조회_렌탈주문정보(정상)](https://user-images.githubusercontent.com/70302880/96540564-040b8880-12d9-11eb-8ebd-0a646113b4b1.PNG)
+ 
+* delivery 배송정보 : http GET http://localhost:8083/deliveries/3
+ ![2-2_결과조회_배송정보](https://user-images.githubusercontent.com/70302880/96540566-04a41f00-12d9-11eb-877e-9f1478e15b3f.PNG)
+ 
+* delivery 재고차감 확인 : http GET http://localhost:8083/products/1  
+  - 최초 제품 등록시 재고 9개, 3개 배송 되어 최종 수량 6개 변경
+ ![2-2_결과조회_배송_재고차감확인](https://user-images.githubusercontent.com/70302880/96540565-040b8880-12d9-11eb-8a37-17ccc7c4e5c8.PNG)
+ 
+* information 내 주문 View : http GET http://localhost:8084/myOrders/3
+ ![2-2_결과조회_내주문VIEW](https://user-images.githubusercontent.com/70302880/96540558-02da5b80-12d9-11eb-8850-b2ec04648aba.PNG)
+ 
+ ### 3-1 렌탈 취소 요청
+* 렌탈취소 :  http DELETE http://localhost:8082/rentals/3
+![3-1_렌탈취소요청](https://user-images.githubusercontent.com/70302880/96540570-04a41f00-12d9-11eb-957f-cb58933be879.PNG)
+
+ ### 3-2 렌탈 취소 후 결과조회
+* rental :  http GET http://localhost:8082/rentals/3
+![3-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540574-05d54c00-12d9-11eb-96a6-7cda28638b83.PNG)
+
+* delivery :  http GET http://localhost:8083/deliveries/3
+![3-2_결과조회_delivery](https://user-images.githubusercontent.com/70302880/96540572-053cb580-12d9-11eb-962b-9cf71791389e.PNG)
+
+* information :  http GET http://localhost:8084/myOrders/3
+![3-2_결과조회_information](https://user-images.githubusercontent.com/70302880/96540573-05d54c00-12d9-11eb-9b2a-ce15b90a01e3.PNG)
+
+* rental :  http GET http://localhost:8082/rentals/3
+![3-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540574-05d54c00-12d9-11eb-96a6-7cda28638b83.PNG)
 
 # 운영
 
