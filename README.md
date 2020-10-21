@@ -395,6 +395,7 @@ public class RentalApplication {
 
     @PreRemove
     public void onPreRemove(){
+    
         // RentalCanceled
         RentalCanceled rentalCanceled = new RentalCanceled();
         BeanUtils.copyProperties(this, rentalCanceled);
@@ -444,9 +445,11 @@ public class Rental {
    
    @PostPersist
    public void onPostPersist(){
+   
        Rentaled rentaled = new Rentaled();
        BeanUtils.copyProperties(this, rentaled);
        rentaled.publishAfterCommit();
+       
    }
 ...
 }
@@ -461,12 +464,14 @@ public class PolicyHandler{
    @StreamListener(KafkaProcessor.INPUT)
    public void wheneverRentaled_Delivery(@Payload Rentaled rentaled){
        if(rentaled.isMe()){
+       
            // 배송 등록
            Delivery delivery = new Delivery();
            delivery.setProductId(rentaled.getProductId());
            delivery.setRentalId(rentaled.getId());
            delivery.setStatus("DELIVERED");
            delivery.setQty(rentaled.getQty());
+	   
            // 재고 확인
            Optional<Product> productOptional = ProductRepository.findByProductId(rentaled.getProductId());
            Product product = null;
@@ -479,6 +484,7 @@ public class PolicyHandler{
                DeliveryRepository.save(delivery);
                return;
            }
+	   
            if ( product.getQty() < rentaled.getQty() ){
                // 재고 부족 -> 보상 트랜젝션 (saga pattern)
                System.out.println("재고 수량 비교 : qty="+product.getQty()+" / rentaled.getQty()="+rentaled.getQty());
