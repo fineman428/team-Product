@@ -604,8 +604,6 @@ http GET http://localhost:8082/rentals/1 # 제대로 kafka로 부터 data 수신
 * information :  http GET http://localhost:8084/myOrders/3
 ![3-2_결과조회_information](https://user-images.githubusercontent.com/70302880/96540573-05d54c00-12d9-11eb-9b2a-ce15b90a01e3.PNG)
 
-* rental :  http GET http://localhost:8082/rentals/3
-![3-2_결과조회_rental](https://user-images.githubusercontent.com/70302880/96540574-05d54c00-12d9-11eb-96a6-7cda28638b83.PNG)
 
 # 운영
 
