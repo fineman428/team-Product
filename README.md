@@ -161,6 +161,37 @@ public class Rental {
     private String status;
     private String productName;
     private Long deliveryId;
+    
+    @PostPersist
+    public void onPostPersist(){
+    
+        Rentaled rentaled = new Rentaled();
+        BeanUtils.copyProperties(this, rentaled);
+        rentaled.publishAfterCommit();
+    }
+
+    @PreRemove
+    public void onPreRemove(){
+    
+        // RentalCanceled
+        RentalCanceled rentalCanceled = new RentalCanceled();
+        BeanUtils.copyProperties(this, rentalCanceled);
+        rentalCanceled.setStatus("CANCELED");
+        rentalCanceled.publishAfterCommit();
+
+        //Following code causes dependency to external APIs
+        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+
+        // 동기호출
+        rentalService.external.Delivery delivery = new rentalService.external.Delivery();
+        // mappings goes here
+        BeanUtils.copyProperties(this, delivery);
+        delivery.setId(deliveryId);
+        delivery.setRentalId(this.id);
+        delivery.setStatus("CANCELED");
+        RentalApplication.applicationContext.getBean(rentalService.external.DeliveryService.class)
+                .deliveryCancel(delivery);
+    }
 
   public Long getId() {
         return id;
